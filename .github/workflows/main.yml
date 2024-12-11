@@ -18,6 +18,11 @@ on:
         options:
           - staging
           - production
+      version:
+        description: 'Version to deploy'
+        required: true
+        default: '1.0.0'
+        type: string
 
 jobs:
   build:
