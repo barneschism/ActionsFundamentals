@@ -1,10 +1,5 @@
-#!/bin/bash
+#!/bin/sh -l
 
-# Exit immediately if a command exits with a non-zero status
-set -e
+echo "hello $1"
 
-# Print the input variable
-echo "Hello $1"
-
-# Set the output variable
-echo "::set-output name=time::$(date)"
+echo "time=$(date)" >> $GITHUB_OUTPUT
