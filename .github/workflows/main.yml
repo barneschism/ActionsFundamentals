@@ -6,23 +6,12 @@ on:
     paths-ignore: [.github/**]
   pull_request:
     branches: [main]
-  schedule:
-    - cron: '15 6 * * 0'
   workflow_dispatch:
     inputs: 
       environment:
         description: 'Deployment environment'
         required: true
-        default: 'staging'
-        type: choice
-        options:
-          - staging
-          - production
-      version:
-        description: 'Version to deploy'
-        required: true
-        default: '1.0.0'
-        type: string
+        type: environment
 
 jobs:
   build:
@@ -40,3 +29,47 @@ jobs:
       run: |
         echo "The repository ${{ github.repository }} contains the following files:"
         tree
+        
+  Test:
+    runs-on: ubuntu-latest
+    if: github.event_name == "workflow_dispatch"
+    needs: build
+    environment: Test
+    steps:
+      - run: echo "Testing..."
+
+  Load-Test:
+    runs-on: ubuntu-latest
+    if: github.event_name == "workflow_dispatch"
+    needs: build
+    environment: Load-Test
+    steps:
+      - run: |
+          echo "Testing..."
+          sleep 5
+
+  Production:
+    runs-on: ubuntu-latest
+    needs: [Test, Load-Test]
+    env:
+      name: Production
+      url: https://writeabout.net
+    if: github.event.inputs.environment == "Production"
+    steps:
+      - run: |
+          echo "🚀 Step 1..."
+          sleep 5
+      - run: |
+          echo "🚀 Step 2..."
+          sleep 5
+      - run: |
+          echo "🚀 Step 3..."
+          sleep 5
+      - run: |
+          echo "🚀 Step 4..."
+          sleep 5
+      - run: |
+          echo "🚀 Step 5..."
+          sleep 5
+    
+    
