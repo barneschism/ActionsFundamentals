@@ -51,7 +51,7 @@ jobs:
   Production:
     runs-on: ubuntu-latest
     needs: [Test, Load-Test]
-    env:
+    environment:
       name: Production
       url: https://writeabout.net
     if: github.event.inputs.environment == 'Production'
